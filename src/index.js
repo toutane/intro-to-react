@@ -88,9 +88,26 @@ class Game extends React.Component {
         const winner = calculateWinner(current.squares);
 
         const moves = history.map((step, move) => {
-            const desc = move ?
-                'Go to move #' + move :
-                'Go to start move';
+            const mover = (move % 2) === 0 ? 'O' : 'X';
+
+            let desc = '';
+            if (move != 0) {
+                // Determines the index of the new move between last step and current one
+                let i = 0;
+                while (i < 9 && step.squares[i] === history[move - 1].squares[i]) {
+                    i++;
+                }
+
+                // Determines the x and y coords of the move
+                const x = i < 3 ? i : (i < 6 ? i - 3 : i - 6);
+                const y = i < 3 ? 0 : (i < 6) ? 1 : 2;
+
+                desc = 'Go to move #' + move + '. ' + mover + ' at (' + x + ',' + y + ')';
+            }
+            else {
+                desc = 'Go to start move';
+            }
+
             return (
                 <li key={move}>
                     <button onClick={() => this.jumpTo(move)}>{desc}</button>
