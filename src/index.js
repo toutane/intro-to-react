@@ -110,6 +110,7 @@ class Game extends React.Component {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
+        const nowinner = !winner && isGameFinished(current.squares);
 
         const moves = history.map((step, move) => {
             const mover = (move % 2) === 0 ? 'O' : 'X';
@@ -147,7 +148,11 @@ class Game extends React.Component {
         if (winner) {
             status = 'Winner: ' + current.squares[winner[0]];
         } else {
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            if (nowinner) {
+                status = 'No one wins ! Reload to play again'
+            } else {
+                status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            }
         }
 
         return (
@@ -192,4 +197,12 @@ function calculateWinner(squares) {
         }
     }
     return null;
+}
+
+function isGameFinished(squares) {
+    let i = 0;
+    while (i < 9 && squares[i] != null) {
+        i++;
+    }
+    return i === 9;
 }
