@@ -19,30 +19,38 @@ class Board extends React.Component {
             <Square
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
+                key={i}
             />
         );
     }
 
     render() {
+        const lines = (i) => {
+            const arr = [];
+            for (let j = 0; j < 3; j++) {
+                arr.push(
+                    this.renderSquare(i + j)
+                )
+            }
+            return arr;
+        }
+
+        const rows = () => {
+            const arr = [];
+            for (let i = 0; i < 7; i = i + 3) {
+                arr.push(
+                    <div className="board-row" key={i}>
+                        {lines(i)}
+                    </div>)
+            }
+            return arr;
+        }
+
         return (
             <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                {rows()}
             </div>
-        );
+        )
     }
 }
 
@@ -92,7 +100,7 @@ class Game extends React.Component {
             const mover = (move % 2) === 0 ? 'O' : 'X';
 
             let desc = '';
-            if (move != 0) {
+            if (move !== 0) {
                 // Determines the index of the new move between last step and current one
                 let i = 0;
                 while (i < 9 && step.squares[i] === history[move - 1].squares[i]) {
