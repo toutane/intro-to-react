@@ -54,6 +54,12 @@ class Board extends React.Component {
     }
 }
 
+function Toggle(props) {
+    return (
+        <button onClick={props.onClick}>Change to : {props.isAscendingOrder ? 'Descending order' : 'Ascending order'}</button>
+    )
+}
+
 class Game extends React.Component {
     constructor(props) {
         super(props)
@@ -64,6 +70,7 @@ class Game extends React.Component {
             stepNumber: 0,
             xIsNext: true,
             currentStep: 0,
+            isAscendingOrder: true,
         }
     }
 
@@ -88,6 +95,12 @@ class Game extends React.Component {
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0,
+        })
+    }
+
+    handleToggle() {
+        this.setState({
+            isAscendingOrder: !this.state.isAscendingOrder,
         })
     }
 
@@ -145,7 +158,10 @@ class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <div style={{ marginTop: 10 }}>
+                        <Toggle isAscendingOrder={this.state.isAscendingOrder} onClick={() => this.handleToggle()} />
+                    </div>
+                    <ol>{moves.sort((a, b) => this.state.isAscendingOrder ? a.key - b.key : b.key - a.key)}</ol>
                 </div>
             </div>
         );
